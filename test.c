@@ -1,6 +1,8 @@
 #include "glad/gl.h"
 #include <GLFW/glfw3.h>
 
+#include "linmath.h"
+
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -8,6 +10,8 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 
 int main(void) {
+    GLint mvp_location;
+
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -44,11 +48,12 @@ int main(void) {
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     // vertex shader GLSL code
-    const char *vertexShaderSource = "#version 330 core\n"
+    const char *vertexShaderSource = "#version 330\n"
+    "uniform mat4 MVP;\n"
     "layout (location = 0) in vec3 aPos;\n"
     "void main()\n"
     "{\n"
-    " gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+    " gl_Position = MVP * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
     "}\0";
 
     // create shader object and compile vertex shader code into it
@@ -69,7 +74,7 @@ int main(void) {
     }
 
     // fragment shader GLSL code
-    const char *fragmentShaderSource = "#version 330 core\n"
+    const char *fragmentShaderSource = "#version 330\n"
     "out vec4 FragColor;\n"
     "void main()\n"
     "{\n"
@@ -112,12 +117,29 @@ int main(void) {
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),(void*)0);
     glEnableVertexAttribArray(0);
 
+    // get MVP location
+    mvp_location = glGetUniformLocation(shaderProgram, "MVP");
+
     // main loop
     while(!glfwWindowShouldClose(window))
     {
-        glClear(GL_COLOR_BUFFER_BIT);
-        glUseProgram(shaderProgram);
+        float ratio;
+        int width, height;
+        mat4x4 m,p,mvp;
 
+        glfwGetFramebufferSize(window, &width, &height);
+        ratio = width / (float) height;
+
+        glClear(GL_COLOR_BUFFER_BIT);
+
+        // create an identity matrix and save into variable m
+        mat4x4_identity(m);
+        mat4x4_rotate_Z(m, m, (float)glfwGetTime());
+        mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 1.f, -1.f);
+        mat4x4_mul(mvp, p, m);
+
+        glUseProgram(shaderProgram);
+        glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*) mvp);
         glDrawArrays(GL_TRIANGLES, 0, 3);
 
         glfwSwapBuffers(window);
