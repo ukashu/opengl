@@ -3,5 +3,6 @@ test
 /glad
 gl.c
 linmath.h
+.vscode
 
 
