@@ -38,25 +38,21 @@ int main(void) {
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     float vertices[] = {
+        // first triangle
         0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // top right
-        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
-        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,// bottom left
-        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f// top left
+        0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom right
+        -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,// top left
+        // second triangle
+        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f,// top left
+        -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,// bottom left
+        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f // bottom right
     };
-    unsigned int indices[] = { // note that we start from 0!
-        0, 1, 3, // first triangle
-        1, 2, 3 // second triangle
-    };
+    
 
     unsigned int VBO;
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    unsigned int EBO;
-    glGenBuffers(1, &EBO);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     // vertex shader GLSL code
     const char *vertexShaderSource = "#version 330\n"
@@ -157,7 +153,7 @@ int main(void) {
 
         glUseProgram(shaderProgram);
         //glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*) mvp);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/(6*sizeof(float)));
 
         glfwSwapBuffers(window);
         glfwPollEvents();
