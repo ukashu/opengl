@@ -38,14 +38,60 @@ int main(void) {
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     float vertices[] = {
-        // first triangle
-        0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // top right
-        0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom right
-        -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f,// top left
-        // second triangle
-        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f,// top left
-        -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f,// bottom left
-        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f // bottom right
+    // front side (red, z-axis static)
+        // zjazdy nieparzyste
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, // top right
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, // bottom right
+        -0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,// top left
+        // zjazdy parzyste
+        -0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,// top left
+        -0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f,// bottom left
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, // bottom right
+    // back side (red, z-axis static)
+        // zjazdy nieparzyste
+        0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, // top right
+        0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, // bottom right
+        -0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f,// top left
+        // zjazdy parzyste
+        -0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f,// top left
+        -0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,// bottom left
+        0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, // bottom right
+    // left side (green, x-axis static)
+        // zjazdy nieparzyste
+        0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, // top right
+        0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom right
+        0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f,// top left
+        // zjazdy parzyste
+        0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f,// top left
+        0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,// bottom left
+        0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom right
+    // right side (green, x-axis static)
+        // zjazdy nieparzyste
+        -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, // top right
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f,// top left
+        // zjazdy parzyste
+        -0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f,// top left
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,// bottom left
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom right
+    // top side (blue, x-axis static)
+        // zjazdy nieparzyste
+        0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, // top right
+        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom right
+        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,// top left
+        // zjazdy parzyste
+        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,// top left
+        -0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f,// bottom left
+        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom right
+    // bottom side (blue, y-axis static)
+        // zjazdy nieparzyste
+        0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, // top right
+        0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom right
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,// top left
+        // zjazdy parzyste
+        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,// top left
+        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 1.0f,// bottom left
+        0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom right
     };
     
 
@@ -56,13 +102,13 @@ int main(void) {
 
     // vertex shader GLSL code
     const char *vertexShaderSource = "#version 330\n"
-    //"uniform mat4 MVP;\n"
+    "uniform mat4 MVP;\n"
     "layout (location = 0) in vec3 aPos;\n"
     "layout (location = 1) in vec3 aColor;\n"
     "out vec3 ourColor;\n"
     "void main()\n"
     "{\n"
-    " gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+    " gl_Position = MVP * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
     "ourColor = aColor;\n"
     "}\0";
 
@@ -146,13 +192,13 @@ int main(void) {
         glClear(GL_COLOR_BUFFER_BIT);
 
         // create an identity matrix and save into variable m
-        //mat4x4_identity(m);
-        //mat4x4_rotate_Z(m, m, (float)glfwGetTime());
-        //mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-        //mat4x4_mul(mvp, p, m);
+        mat4x4_identity(m);
+        mat4x4_rotate_Z(m, m, (float)glfwGetTime());
+        mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 1.f, -1.f);
+        mat4x4_mul(mvp, p, m);
 
         glUseProgram(shaderProgram);
-        //glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*) mvp);
+        glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*) mvp);
         glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/(6*sizeof(float)));
 
         glfwSwapBuffers(window);
