@@ -38,10 +38,10 @@ int main(void) {
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     float vertices[] = {
-        0.5f, 0.5f, 0.0f, // top right
-        0.5f, -0.5f, 0.0f, // bottom right
-        -0.5f, -0.5f, 0.0f, // bottom left
-        -0.5f, 0.5f, 0.0f // top left
+        0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, // top right
+        0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f,// bottom left
+        -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f// top left
     };
     unsigned int indices[] = { // note that we start from 0!
         0, 1, 3, // first triangle
@@ -60,11 +60,14 @@ int main(void) {
 
     // vertex shader GLSL code
     const char *vertexShaderSource = "#version 330\n"
-    "uniform mat4 MVP;\n"
+    //"uniform mat4 MVP;\n"
     "layout (location = 0) in vec3 aPos;\n"
+    "layout (location = 1) in vec3 aColor;\n"
+    "out vec3 ourColor;\n"
     "void main()\n"
     "{\n"
-    " gl_Position = MVP * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+    " gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+    "ourColor = aColor;\n"
     "}\0";
 
     // create shader object and compile vertex shader code into it
@@ -87,9 +90,10 @@ int main(void) {
     // fragment shader GLSL code
     const char *fragmentShaderSource = "#version 330\n"
     "out vec4 FragColor;\n"
+    "in vec3 ourColor;\n"
     "void main()\n"
     "{\n"
-    "FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+    "FragColor = vec4(ourColor, 1.0f);\n"
     "}\0";
 
     // create shader object and compile fragment shader code into it
@@ -125,10 +129,12 @@ int main(void) {
     //glDeleteShader(fragmentShader); 
 
     // telling OpenGL how to interpret the data from vertex buffer
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float),(void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),(void*)0);
     glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),(void*)(3*sizeof(float)));
+    glEnableVertexAttribArray(1);
 
-    // get MVP location
+    // bind shader MVP variable to mvp_location variable in OpenGL
     mvp_location = glGetUniformLocation(shaderProgram, "MVP");
 
     // main loop
@@ -144,13 +150,13 @@ int main(void) {
         glClear(GL_COLOR_BUFFER_BIT);
 
         // create an identity matrix and save into variable m
-        mat4x4_identity(m);
-        mat4x4_rotate_Z(m, m, (float)glfwGetTime());
-        mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-        mat4x4_mul(mvp, p, m);
+        //mat4x4_identity(m);
+        //mat4x4_rotate_Z(m, m, (float)glfwGetTime());
+        //mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 1.f, -1.f);
+        //mat4x4_mul(mvp, p, m);
 
         glUseProgram(shaderProgram);
-        glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*) mvp);
+        //glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*) mvp);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
         glfwSwapBuffers(window);
