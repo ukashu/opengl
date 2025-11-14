@@ -7,6 +7,7 @@
 #include <stdio.h>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
+void print_mat4x4(const mat4x4 M);
 
 
 int main(void) {
@@ -49,22 +50,22 @@ int main(void) {
         0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, // bottom right
     // back side (red, z-axis static)
         // zjazdy nieparzyste
-        0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f, // top right
-        0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, // bottom right
-        -0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f,// top left
+        0.5f, 0.5f, -0.5f, 1.0f, 0.5f, 0.5f, // top right
+        0.5f, -0.5f, -0.5f, 1.0f, 0.5f, 0.5f, // bottom right
+        -0.5f, 0.5f, -0.5f, 1.0f, 0.5f, 0.5f,// top left
         // zjazdy parzyste
-        -0.5f, 0.5f, -0.5f, 1.0f, 0.0f, 0.0f,// top left
-        -0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f,// bottom left
-        0.5f, -0.5f, -0.5f, 1.0f, 0.0f, 0.0f, // bottom right
+        -0.5f, 0.5f, -0.5f, 1.0f, 0.5f, 0.5f,// top left
+        -0.5f, -0.5f, -0.5f, 1.0f, 0.5f, 0.5f,// bottom left
+        0.5f, -0.5f, -0.5f, 1.0f, 0.5f, 0.5, // bottom right
     // left side (green, x-axis static)
         // zjazdy nieparzyste
-        0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, // top right
-        0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom right
-        0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f,// top left
+        0.5f, 0.5f, 0.5f, 0.5f, 1.0f, 0.5f, // top right
+        0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 0.5f, // bottom right
+        0.5f, -0.5f, 0.5f, 0.5f, 1.0f, 0.5f,// top left
         // zjazdy parzyste
-        0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f,// top left
-        0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,// bottom left
-        0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom right
+        0.5f, -0.5f, 0.5f, 0.5f, 1.0f, 0.5f,// top left
+        0.5f, -0.5f, -0.5f, 0.5f, 1.0f, 0.5f,// bottom left
+        0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 0.5f, // bottom right
     // right side (green, x-axis static)
         // zjazdy nieparzyste
         -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, // top right
@@ -85,13 +86,13 @@ int main(void) {
         0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom right
     // bottom side (blue, y-axis static)
         // zjazdy nieparzyste
-        0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f, // top right
-        0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom right
-        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,// top left
+        0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 1.0f, // top right
+        0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 1.0f, // bottom right
+        -0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 1.0f,// top left
         // zjazdy parzyste
-        -0.5f, -0.5f, 0.5f, 0.0f, 0.0f, 1.0f,// top left
-        -0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 1.0f,// bottom left
-        0.5f, -0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom right
+        -0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 1.0f,// top left
+        -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 1.0f,// bottom left
+        0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 1.0f, // bottom right
     };
     
 
@@ -193,9 +194,17 @@ int main(void) {
 
         // create an identity matrix and save into variable m
         mat4x4_identity(m);
+        //printf("After identity:\n");
+        //print_mat4x4(m);
         mat4x4_rotate_X(m, m, 0.7f);
+        //printf("After rotate X:\n");
+        //print_mat4x4(m);
         mat4x4_rotate_Y(m, m, (float)glfwGetTime());
+        //printf("After rotate Y:\n");
+        //print_mat4x4(m);
         mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 1.f, -1.f);
+        //printf("After ortho:\n");
+        //print_mat4x4(p);
         mat4x4_mul(mvp, p, m);
 
         glUseProgram(shaderProgram);
@@ -213,4 +222,12 @@ int main(void) {
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
+}
+
+void print_mat4x4(const mat4x4 M) {
+    printf("Matrix:\n");
+    for(int i = 0; i < 4; i++) {
+        printf("[ %f %f %f %f ]\n",
+            M[i][0], M[i][1], M[i][2], M[i][3]);
+    }
 }
