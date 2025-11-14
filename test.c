@@ -193,7 +193,7 @@ int main(void) {
 
         // create an identity matrix and save into variable m
         mat4x4_identity(m);
-        mat4x4_rotate_Z(m, m, (float)glfwGetTime());
+        mat4x4_rotate_Y(m, m, (float)glfwGetTime());
         mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 1.f, -1.f);
         mat4x4_mul(mvp, p, m);
 
