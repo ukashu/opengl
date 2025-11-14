@@ -198,7 +198,7 @@ int main(void) {
         //printf("After identity:\n");
         //print_mat4x4(m);
         mat4x4_translate(m, sin((float)glfwGetTime()), 0.0f, 0.0f);
-        mat4x4_rotate_X(m, m, 0.7f);
+        mat4x4_rotate_X(m, m, (float)glfwGetTime());
         //printf("After rotate X:\n");
         //print_mat4x4(m);
         mat4x4_rotate_Y(m, m, (float)glfwGetTime());
