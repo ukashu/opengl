@@ -170,6 +170,7 @@ int main(void) {
     // delete shader objects
     //glDeleteShader(vertexShader);
     //glDeleteShader(fragmentShader); 
+    glEnable(GL_DEPTH_TEST);
 
     // telling OpenGL how to interpret the data from vertex buffer
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),(void*)0);
@@ -190,7 +191,7 @@ int main(void) {
         glfwGetFramebufferSize(window, &width, &height);
         ratio = width / (float) height;
 
-        glClear(GL_COLOR_BUFFER_BIT);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // create an identity matrix and save into variable m
         mat4x4_identity(m);
