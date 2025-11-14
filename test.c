@@ -197,12 +197,14 @@ int main(void) {
         mat4x4_identity(m);
         //printf("After identity:\n");
         //print_mat4x4(m);
+        mat4x4_translate(m, sin((float)glfwGetTime()), 0.0f, 0.0f);
         mat4x4_rotate_X(m, m, 0.7f);
         //printf("After rotate X:\n");
         //print_mat4x4(m);
         mat4x4_rotate_Y(m, m, (float)glfwGetTime());
         //printf("After rotate Y:\n");
         //print_mat4x4(m);
+        // move it left to right
         mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 1.f, -1.f);
         //printf("After ortho:\n");
         //print_mat4x4(p);
