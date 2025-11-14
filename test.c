@@ -40,56 +40,56 @@ int main(void) {
 
     float vertices[] = {
     // front side (red, z-axis static)
-        // zjazdy nieparzyste
+        // top triangle
         0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, // top right
         0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, // bottom right
         -0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,// top left
-        // zjazdy parzyste
+        // bottom triangle
         -0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,// top left
         -0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f,// bottom left
         0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, // bottom right
     // back side (red, z-axis static)
-        // zjazdy nieparzyste
+        // top triangle
         0.5f, 0.5f, -0.5f, 1.0f, 0.5f, 0.5f, // top right
         0.5f, -0.5f, -0.5f, 1.0f, 0.5f, 0.5f, // bottom right
         -0.5f, 0.5f, -0.5f, 1.0f, 0.5f, 0.5f,// top left
-        // zjazdy parzyste
+        // bottom triangle
         -0.5f, 0.5f, -0.5f, 1.0f, 0.5f, 0.5f,// top left
         -0.5f, -0.5f, -0.5f, 1.0f, 0.5f, 0.5f,// bottom left
         0.5f, -0.5f, -0.5f, 1.0f, 0.5f, 0.5, // bottom right
     // left side (green, x-axis static)
-        // zjazdy nieparzyste
+        // top triangle
         0.5f, 0.5f, 0.5f, 0.5f, 1.0f, 0.5f, // top right
         0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 0.5f, // bottom right
         0.5f, -0.5f, 0.5f, 0.5f, 1.0f, 0.5f,// top left
-        // zjazdy parzyste
+        // bottom triangle
         0.5f, -0.5f, 0.5f, 0.5f, 1.0f, 0.5f,// top left
         0.5f, -0.5f, -0.5f, 0.5f, 1.0f, 0.5f,// bottom left
         0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 0.5f, // bottom right
     // right side (green, x-axis static)
-        // zjazdy nieparzyste
+        // top triangle
         -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, // top right
         -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom right
         -0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f,// top left
-        // zjazdy parzyste
+        // bottom triangle
         -0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f,// top left
         -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,// bottom left
         -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom right
     // top side (blue, x-axis static)
-        // zjazdy nieparzyste
+        // top triangle
         0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, // top right
         0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom right
         -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,// top left
-        // zjazdy parzyste
+        // bottom triangle
         -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,// top left
         -0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f,// bottom left
         0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom right
     // bottom side (blue, y-axis static)
-        // zjazdy nieparzyste
+        // top triangle
         0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 1.0f, // top right
         0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 1.0f, // bottom right
         -0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 1.0f,// top left
-        // zjazdy parzyste
+        // bottom triangle
         -0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 1.0f,// top left
         -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 1.0f,// bottom left
         0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 1.0f, // bottom right
