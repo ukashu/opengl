@@ -10,7 +10,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void print_mat4x4(const mat4x4 M);
 void processInput(GLFWwindow *window);
 
-vec3 camPos = {0.0f, 0.0f , 1.0f};
+vec3 camPos = {0.0f, 1.0f , 1.0f};
 vec3 camTarget = {0.0f, 0.0f , 0.0f};
 
 int main(void) {
