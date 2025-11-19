@@ -8,7 +8,10 @@
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void print_mat4x4(const mat4x4 M);
+void processInput(GLFWwindow *window);
 
+vec3 camPos = {0.0f, 0.0f , 1.0f};
+vec3 camTarget = {0.0f, 0.0f , 0.0f};
 
 int main(void) {
     GLint mvp_location;
@@ -181,12 +184,28 @@ int main(void) {
     // bind shader MVP variable to mvp_location variable in OpenGL
     mvp_location = glGetUniformLocation(shaderProgram, "MVP");
 
+    // camera view variable declaration
+    mat4x4 LookAt;
+    vec3 camDir;
+    vec3_sub(camDir, camPos, camTarget);
+    vec3_norm(camDir, camDir);
+    vec3 camRight;
+    vec3 tempUp = {0.0f,1.0f,0.0f};
+    vec3_mul_cross(camRight, tempUp, camDir);
+    vec3_norm(camRight, camRight);
+
+    vec3 camUp;
+    vec3_mul_cross(camUp, camDir, camRight);
+    vec3_norm(camUp,camUp);
+
+
     // main loop
     while(!glfwWindowShouldClose(window))
     {
+        processInput(window);
         float ratio;
         int width, height;
-        mat4x4 m,p,mvp;
+        mat4x4 m,p,vp,mvp;
 
         glfwGetFramebufferSize(window, &width, &height);
         ratio = width / (float) height;
@@ -195,20 +214,50 @@ int main(void) {
 
         // create an identity matrix and save into variable m
         mat4x4_identity(m);
-        //printf("After identity:\n");
-        //print_mat4x4(m);
-        mat4x4_translate(m, sin((float)glfwGetTime()), 0.0f, 0.0f);
-        mat4x4_rotate_X(m, m, (float)glfwGetTime());
-        //printf("After rotate X:\n");
-        //print_mat4x4(m);
-        mat4x4_rotate_Y(m, m, (float)glfwGetTime());
-        //printf("After rotate Y:\n");
-        //print_mat4x4(m);
+        //mat4x4_rotate_X(m, m, (float)glfwGetTime());
+        //mat4x4 temp;
+        //mat4x4_translate(temp, sin((float)glfwGetTime()), 0.0f, 0.0f);
+        //mat4x4_mul(m, temp, m);
+        //mat4x4_rotate_Y(m, m, (float)glfwGetTime());
         // move it left to right
-        mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 1.f, -1.f);
-        //printf("After ortho:\n");
-        //print_mat4x4(p);
-        mat4x4_mul(mvp, p, m);
+        // orthographic projection
+        //mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 0.1f, 100.0f);
+        // perspective projection
+        mat4x4_perspective(p, (float)3.14/4, ratio, 1.0f, 10.0f);
+
+        // creating a view
+        vec3_sub(camDir, camPos, camTarget);
+        vec3_norm(camDir, camDir);
+        vec3_mul_cross(camRight, tempUp, camDir);
+        vec3_norm(camRight, camRight);
+        vec3_mul_cross(camUp, camDir, camRight);
+        vec3_norm(camUp,camUp);
+
+        LookAt[0][0] =  camRight[0];
+        LookAt[0][1] =  camUp[0];
+        LookAt[0][2] =  camDir[0];
+        LookAt[0][3] =  0.f;
+
+        LookAt[1][0] =  camRight[1];
+        LookAt[1][1] =  camUp[1];
+        LookAt[1][2] =  camDir[1];
+        LookAt[1][3] =  0.f;
+
+        LookAt[2][0] =  camRight[2];
+        LookAt[2][1] =  camUp[2];
+        LookAt[2][2] =  camDir[2];
+        LookAt[2][3] =  0.f;
+
+        LookAt[3][0] =  0.f;
+        LookAt[3][1] =  0.f;
+        LookAt[3][2] =  0.f;
+        LookAt[3][3] =  1.f;
+
+        mat4x4_translate_in_place(LookAt, -camPos[0], -camPos[1], -camPos[2]);
+
+        mat4x4_mul(vp, p, LookAt);
+
+        mat4x4_mul(mvp, vp, m);
 
         glUseProgram(shaderProgram);
         glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*) mvp);
@@ -232,5 +281,22 @@ void print_mat4x4(const mat4x4 M) {
     for(int i = 0; i < 4; i++) {
         printf("[ %f %f %f %f ]\n",
             M[i][0], M[i][1], M[i][2], M[i][3]);
+    }
+}
+
+void processInput(GLFWwindow *window)
+{
+    const float cameraSpeed = 0.05f; // adjust accordingly
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
+        camPos[2] -= cameraSpeed*1;
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
+        camPos[2] += cameraSpeed*1;
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
+        camPos[0] -= cameraSpeed*1;
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
+        camPos[0] += cameraSpeed*1;
     }
 }
