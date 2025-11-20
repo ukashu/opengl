@@ -11,7 +11,9 @@ void print_mat4x4(const mat4x4 M);
 void processInput(GLFWwindow *window);
 
 vec3 camPos = {0.0f, 1.0f , 1.0f};
-vec3 camTarget = {0.0f, 0.0f , 0.0f};
+vec3 camTarget = {0.0f, 0.0f , 1.0f};
+vec3 camFront = {0.0f, 0.0f, -1.0f};
+vec3 tempUp = {0.0f,1.0f,0.0f};
 
 int main(void) {
     GLint mvp_location;
@@ -190,7 +192,6 @@ int main(void) {
     vec3_sub(camDir, camPos, camTarget);
     vec3_norm(camDir, camDir);
     vec3 camRight;
-    vec3 tempUp = {0.0f,1.0f,0.0f};
     vec3_mul_cross(camRight, tempUp, camDir);
     vec3_norm(camRight, camRight);
 
@@ -223,7 +224,7 @@ int main(void) {
         // orthographic projection
         //mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 0.1f, 100.0f);
         // perspective projection
-        mat4x4_perspective(p, (float)3.14/4, ratio, 1.0f, 10.0f);
+        mat4x4_perspective(p, (float)3.14/4, ratio, 0.1f, 10.0f);
 
         // creating a view
         vec3_sub(camDir, camPos, camTarget);
@@ -288,19 +289,31 @@ void processInput(GLFWwindow *window)
 {
     const float cameraSpeed = 0.05f; // adjust accordingly
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        camPos[2] -= cameraSpeed*1;
-        camTarget[2] -= cameraSpeed*1;
+        printf("W\n");
+        vec3 temp;
+        vec3_scale(temp, camTarget, cameraSpeed);
+        vec3_sub(camPos, camPos, temp);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        camPos[2] += cameraSpeed*1;
-        camTarget[2] += cameraSpeed*1;
+        printf("S\n");
+        vec3 temp;
+        vec3_scale(temp, camTarget, -cameraSpeed);
+        vec3_sub(camPos, camPos, temp);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        camPos[0] -= cameraSpeed*1;
-        camTarget[0] -= cameraSpeed*1;
+        printf("A\n");
+        vec3 temp;
+        vec3_mul_cross(temp, camTarget, tempUp);
+        vec3_norm(temp, temp);
+        vec3_scale(temp, temp, -cameraSpeed);
+        vec3_sub(camPos, camPos, temp);
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        camPos[0] += cameraSpeed*1;
-        camTarget[0] += cameraSpeed*1;
+        printf("D\n");
+        vec3 temp;
+        vec3_mul_cross(temp, camTarget, tempUp);
+        vec3_norm(temp, temp);
+        vec3_scale(temp, temp, cameraSpeed);
+        vec3_sub(camPos, camPos, temp);
     }
 }
