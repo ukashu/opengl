@@ -289,14 +289,18 @@ void processInput(GLFWwindow *window)
     const float cameraSpeed = 0.05f; // adjust accordingly
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         camPos[2] -= cameraSpeed*1;
+        camTarget[2] -= cameraSpeed*1;
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
         camPos[2] += cameraSpeed*1;
+        camTarget[2] += cameraSpeed*1;
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
         camPos[0] -= cameraSpeed*1;
+        camTarget[0] -= cameraSpeed*1;
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
         camPos[0] += cameraSpeed*1;
+        camTarget[0] += cameraSpeed*1;
     }
 }
