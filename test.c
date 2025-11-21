@@ -359,13 +359,21 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     if(pitch < -89.0f)
         pitch = -89.0f;
 
+    if (yaw > 360.0f)
+        yaw -= 360.0f;
+    else if (yaw < 0.0f)
+        yaw += 360.0f;
+
     //conversion to radians
     float radYaw = yaw * (M_PI / 180.0f);
     float radPitch = pitch * (M_PI / 180.0f);
+
+    //printf("Yaw in radians: %f\n", radYaw);
     
     vec3 direction;
     direction[0] = cosf(radYaw) * cosf(radPitch);
     direction[1] = sinf(radPitch);
     direction[2] = sinf(radYaw) * cosf(radPitch);
     vec3_norm(camTarget, direction);
+    printf("Direction x: %f, y: %f, z: %f\n",direction[0], direction[1], direction[2]);
 }
