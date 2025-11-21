@@ -5,15 +5,28 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <stdbool.h>
+#include <math.h>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void print_mat4x4(const mat4x4 M);
 void processInput(GLFWwindow *window);
+void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 
 vec3 camPos = {0.0f, 1.0f , 1.0f};
-vec3 camTarget = {0.0f, 0.0f , 1.0f};
+vec3 camTarget = {0.0f, 0.0f , -1.0f};
 vec3 camFront = {0.0f, 0.0f, -1.0f};
-vec3 tempUp = {0.0f,1.0f,0.0f};
+vec3 tempUp = {0.0f, 1.0f, 0.0f};
+
+vec3 direction;
+float yaw = -90.0f;
+float pitch = 0.0f;
+bool firstMouse = true;
+float lastX = 400, lastY = 300;
 
 int main(void) {
     GLint mvp_location;
@@ -199,6 +212,8 @@ int main(void) {
     vec3_mul_cross(camUp, camDir, camRight);
     vec3_norm(camUp,camUp);
 
+    glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPosCallback(window, mouse_callback);
 
     // main loop
     while(!glfwWindowShouldClose(window))
@@ -291,13 +306,13 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         printf("W\n");
         vec3 temp;
-        vec3_scale(temp, camTarget, cameraSpeed);
+        vec3_scale(temp, camTarget, -cameraSpeed);
         vec3_sub(camPos, camPos, temp);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
         printf("S\n");
         vec3 temp;
-        vec3_scale(temp, camTarget, -cameraSpeed);
+        vec3_scale(temp, camTarget, cameraSpeed);
         vec3_sub(camPos, camPos, temp);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
@@ -305,7 +320,7 @@ void processInput(GLFWwindow *window)
         vec3 temp;
         vec3_mul_cross(temp, camTarget, tempUp);
         vec3_norm(temp, temp);
-        vec3_scale(temp, temp, -cameraSpeed);
+        vec3_scale(temp, temp, cameraSpeed);
         vec3_sub(camPos, camPos, temp);
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
@@ -313,7 +328,44 @@ void processInput(GLFWwindow *window)
         vec3 temp;
         vec3_mul_cross(temp, camTarget, tempUp);
         vec3_norm(temp, temp);
-        vec3_scale(temp, temp, cameraSpeed);
+        vec3_scale(temp, temp, -cameraSpeed);
         vec3_sub(camPos, camPos, temp);
     }
+}
+
+void mouse_callback(GLFWwindow* window, double xpos, double ypos)
+{
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos;
+    lastX = xpos;
+    lastY = ypos;
+
+    float sensitivity = 0.1f;
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+
+    yaw += xoffset;
+    pitch += yoffset;
+
+    if(pitch > 89.0f)
+        pitch = 89.0f;
+    if(pitch < -89.0f)
+        pitch = -89.0f;
+
+    //conversion to radians
+    float radYaw = yaw * (M_PI / 180.0f);
+    float radPitch = pitch * (M_PI / 180.0f);
+    
+    vec3 direction;
+    direction[0] = cosf(radYaw) * cosf(radPitch);
+    direction[1] = sinf(radPitch);
+    direction[2] = sinf(radYaw) * cosf(radPitch);
+    vec3_norm(camTarget, direction);
 }
