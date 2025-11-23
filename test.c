@@ -105,12 +105,25 @@ int main(void) {
     // bottom side (blue, y-axis static)
         // top triangle
         0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 1.0f, // top right
-        0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 1.0f, // bottom right
-        -0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 1.0f,// top left
+        0.5f, -0.5f, -0.5f, .5f, 0.5f, 1.0f, // bottom right
+        -0.5f, -0.5f, 0.5, 0.5f, 0.5f, 1.0f,// top left
         // bottom triangle
-        -0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 1.0f,// top left
-        -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 1.0f,// bottom left
-        0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 1.0f, // bottom right
+        -0.5f, -0.5f, 0.5f, .5f, 0.5f, 1.0f,// top left
+        -0.5f, -0.5f, -0.5f, .5f, 0.5f, 1.0f,// bottom left
+        0.5f, -0.5f, -0.5f, .5f, 0.5f, 1.0f, // bottom right
+    };
+
+    vec3 cubePositions[] = {
+        { 0.0f, 0.0f,0.0f},
+        {2.0f, 5.0f, -15.0f},
+        {-1.5f, -2.2f, -2.5f},
+        {-3.8f, -2.0f, -12.3f},
+        { 2.4f, -0.4f, -3.5f},
+        {-1.7f, 3.0f, -7.5f},
+        { 1.3f, -2.0f, -2.5f},
+        { 1.5f, 2.0f, -2.5f},
+        { 1.5f, 0.2f, -1.5f},
+        {-1.3f, 1.0f, -1.5f}
     };
     
 
@@ -273,11 +286,23 @@ int main(void) {
 
         mat4x4_mul(vp, p, LookAt);
 
-        mat4x4_mul(mvp, vp, m);
-
         glUseProgram(shaderProgram);
-        glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const GLfloat*) mvp);
-        glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/(6*sizeof(float)));
+
+        for (int i = 0; i < 10; i++)
+        {
+            mat4x4 m, mvp;
+
+            mat4x4_identity(m);
+            mat4x4_translate_in_place(m,
+                cubePositions[i][0],
+                cubePositions[i][1],
+                cubePositions[i][2]);
+
+            mat4x4_mul(mvp, vp, m);
+
+            glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const float*)mvp);
+            glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/(6*sizeof(float)));
+        }
 
         glfwSwapBuffers(window);
         glfwPollEvents();
