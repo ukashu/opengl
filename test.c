@@ -21,6 +21,8 @@ vec3 camPos = {0.0f, 1.0f , 1.0f};
 vec3 camTarget = {0.0f, 0.0f , -1.0f};
 vec3 camFront = {0.0f, 0.0f, -1.0f};
 vec3 tempUp = {0.0f, 1.0f, 0.0f};
+vec3 camDir = {0.0f, 0.0f, 1.0f};
+vec3 camRight;
 
 vec3 direction;
 float yaw = -90.0f;
@@ -214,10 +216,8 @@ int main(void) {
 
     // camera view variable declaration
     mat4x4 LookAt;
-    vec3 camDir;
     vec3_sub(camDir, camPos, camTarget);
     vec3_norm(camDir, camDir);
-    vec3 camRight;
     vec3_mul_cross(camRight, tempUp, camDir);
     vec3_norm(camRight, camRight);
 
@@ -255,7 +255,8 @@ int main(void) {
         mat4x4_perspective(p, (float)3.14/4, ratio, 0.1f, 10.0f);
 
         // creating a view
-        vec3_sub(camDir, camPos, camTarget);
+        //vec3_sub(camDir, camPos, camTarget);
+        vec3_norm(camDir, camTarget);
         vec3_norm(camDir, camDir);
         vec3_mul_cross(camRight, tempUp, camDir);
         vec3_norm(camRight, camRight);
@@ -331,29 +332,25 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         printf("W\n");
         vec3 temp;
-        vec3_scale(temp, camTarget, -cameraSpeed);
+        vec3_scale(temp, camDir, -cameraSpeed);
         vec3_sub(camPos, camPos, temp);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
         printf("S\n");
         vec3 temp;
-        vec3_scale(temp, camTarget, cameraSpeed);
+        vec3_scale(temp, camDir, cameraSpeed);
         vec3_sub(camPos, camPos, temp);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
         printf("A\n");
         vec3 temp;
-        vec3_mul_cross(temp, camTarget, tempUp);
-        vec3_norm(temp, temp);
-        vec3_scale(temp, temp, cameraSpeed);
+        vec3_scale(temp, camRight, -cameraSpeed);
         vec3_sub(camPos, camPos, temp);
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
         printf("D\n");
         vec3 temp;
-        vec3_mul_cross(temp, camTarget, tempUp);
-        vec3_norm(temp, temp);
-        vec3_scale(temp, temp, -cameraSpeed);
+        vec3_scale(temp, camRight, cameraSpeed);
         vec3_sub(camPos, camPos, temp);
     }
 }
