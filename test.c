@@ -365,7 +365,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     }
 
     float xoffset = xpos - lastX;
-    float yoffset = lastY - ypos;
+    float yoffset = ypos - lastY;
     lastX = xpos;
     lastY = ypos;
 
