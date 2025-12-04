@@ -4,5 +4,8 @@ test
 gl.c
 linmath.h
 .vscode
+*.png
+*.jpg
+*.jpeg
 
 
