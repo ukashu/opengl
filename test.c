@@ -21,7 +21,7 @@ vec3 camPos = {0.0f, 1.0f , 1.0f};
 vec3 camTarget = {0.0f, 0.0f , -1.0f};
 vec3 camFront = {0.0f, 0.0f, -1.0f};
 vec3 tempUp = {0.0f, 1.0f, 0.0f};
-vec3 camDir = {0.0f, 0.0f, 1.0f};
+vec3 camDir = {0.0f, 0.0f, -1.0f};
 vec3 camRight;
 
 vec3 direction;
@@ -332,25 +332,25 @@ void processInput(GLFWwindow *window)
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         //printf("W\n");
         vec3 temp;
-        vec3_scale(temp, camDir, -cameraSpeed);
+        vec3_scale(temp, camDir, cameraSpeed);
         vec3_sub(camPos, camPos, temp);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
         //printf("S\n");
         vec3 temp;
-        vec3_scale(temp, camDir, cameraSpeed);
+        vec3_scale(temp, camDir, -cameraSpeed);
         vec3_sub(camPos, camPos, temp);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
         //printf("A\n");
         vec3 temp;
-        vec3_scale(temp, camRight, -cameraSpeed);
+        vec3_scale(temp, camRight, cameraSpeed);
         vec3_sub(camPos, camPos, temp);
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
         //printf("D\n");
         vec3 temp;
-        vec3_scale(temp, camRight, cameraSpeed);
+        vec3_scale(temp, camRight, -cameraSpeed);
         vec3_sub(camPos, camPos, temp);
     }
 }
