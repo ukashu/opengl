@@ -119,16 +119,8 @@ int main(void) {
     };
 
     vec3 cubePositions[] = {
-        { 0.0f, 0.0f,0.0f},
-        {2.0f, 5.0f, -15.0f},
-        {-1.5f, -2.2f, -2.5f},
-        {-3.8f, -2.0f, -12.3f},
-        { 2.4f, -0.4f, -3.5f},
-        {-1.7f, 3.0f, -7.5f},
-        { 1.3f, -2.0f, -2.5f},
-        { 1.5f, 2.0f, -2.5f},
-        { 1.5f, 0.2f, -1.5f},
-        {-1.3f, 1.0f, -1.5f}
+        { -3.0f, 0.0f, 0.0f },
+        { -1.0f, 0.0f, 0.0f }
     };
     
 
@@ -222,8 +214,10 @@ int main(void) {
     glEnableVertexAttribArray(2);
 
     // texture loading
-    unsigned int texture;
+    unsigned int texture, texture2;
+    // first texture
     glGenTextures(1, &texture);
+    glActiveTexture(GL_TEXTURE);
     glBindTexture(GL_TEXTURE_2D, texture);
     // texture wrapping/filtering options
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
@@ -239,7 +233,29 @@ int main(void) {
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
         glGenerateMipmap(GL_TEXTURE_2D);
     } else {
-        printf("Failed to load texture\n");
+        printf("Failed to load texture 1\n");
+        return -1;
+    }
+    stbi_image_free(data);
+
+    // second texture
+    glGenTextures(1, &texture2);
+    glActiveTexture(GL_TEXTURE);
+    glBindTexture(GL_TEXTURE_2D, texture2);
+    // texture wrapping/filtering options
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // loading image
+    // flip vertically
+    stbi_set_flip_vertically_on_load(true);
+    data = stbi_load("./assets/container.jpg", &width, &height, &nrChannels, 0);
+    if (data) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    } else {
+        printf("Failed to load texture 2\n");
         return -1;
     }
     stbi_image_free(data);
@@ -323,7 +339,7 @@ int main(void) {
 
         glUseProgram(shaderProgram);
         
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 2; i++)
         {
             mat4x4 m, mvp;
 
@@ -334,6 +350,12 @@ int main(void) {
                 cubePositions[i][2]);
 
             mat4x4_mul(mvp, vp, m);
+
+            if (i == 0) {
+                glBindTexture(GL_TEXTURE_2D, texture);
+            } else {
+                glBindTexture(GL_TEXTURE_2D, texture2);
+            }
 
             glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const float*)mvp);
             glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/(6*sizeof(float)));
