@@ -252,7 +252,7 @@ int main(void) {
         // orthographic projection
         //mat4x4_ortho(p, -ratio, ratio, -1.f, 1.f, 0.1f, 100.0f);
         // perspective projection
-        mat4x4_perspective(p, (float)3.14/4, ratio, 0.1f, 10.0f);
+        mat4x4_perspective(p, (float)3.14/4, ratio, 0.1f, 100.0f);
 
         // creating a view
         //vec3_sub(camDir, camPos, camTarget);
@@ -288,7 +288,7 @@ int main(void) {
         mat4x4_mul(vp, p, LookAt);
 
         glUseProgram(shaderProgram);
-
+        
         for (int i = 0; i < 10; i++)
         {
             mat4x4 m, mvp;
@@ -330,25 +330,25 @@ void processInput(GLFWwindow *window)
 {
     const float cameraSpeed = 0.05f; // adjust accordingly
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        printf("W\n");
+        //printf("W\n");
         vec3 temp;
         vec3_scale(temp, camDir, -cameraSpeed);
         vec3_sub(camPos, camPos, temp);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        printf("S\n");
+        //printf("S\n");
         vec3 temp;
         vec3_scale(temp, camDir, cameraSpeed);
         vec3_sub(camPos, camPos, temp);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        printf("A\n");
+        //printf("A\n");
         vec3 temp;
         vec3_scale(temp, camRight, -cameraSpeed);
         vec3_sub(camPos, camPos, temp);
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        printf("D\n");
+        //printf("D\n");
         vec3 temp;
         vec3_scale(temp, camRight, cameraSpeed);
         vec3_sub(camPos, camPos, temp);
@@ -397,5 +397,5 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     direction[1] = sinf(radPitch);
     direction[2] = sinf(radYaw) * cosf(radPitch);
     vec3_norm(camTarget, direction);
-    printf("Direction x: %f, y: %f, z: %f\n",direction[0], direction[1], direction[2]);
+    //printf("Direction x: %f, y: %f, z: %f\n",direction[0], direction[1], direction[2]);
 }
