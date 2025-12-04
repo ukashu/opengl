@@ -8,6 +8,9 @@
 #include <stdbool.h>
 #include <math.h>
 
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 #ifndef M_PI
 #define M_PI 3.14159265358979323846
 #endif
@@ -61,58 +64,58 @@ int main(void) {
     float vertices[] = {
     // front side (red, z-axis static)
         // top triangle
-        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, // top right
-        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, // bottom right
-        -0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,// top left
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
+        -0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // top left
         // bottom triangle
-        -0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f,// top left
-        -0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f,// bottom left
-        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, // bottom right
+        -0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // top left
+        -0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // bottom left
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
     // back side (red, z-axis static)
         // top triangle
-        0.5f, 0.5f, -0.5f, 1.0f, 0.5f, 0.5f, // top right
-        0.5f, -0.5f, -0.5f, 1.0f, 0.5f, 0.5f, // bottom right
-        -0.5f, 0.5f, -0.5f, 1.0f, 0.5f, 0.5f,// top left
+        0.5f, 0.5f, -0.5f, 1.0f, 0.5f, 0.5f, 1.0f, 1.0f, // top right
+        0.5f, -0.5f, -0.5f, 1.0f, 0.5f, 0.5f, 1.0f, 0.0f, // bottom right
+        -0.5f, 0.5f, -0.5f, 1.0f, 0.5f, 0.5f, 0.0f, 1.0f, // top left
         // bottom triangle
-        -0.5f, 0.5f, -0.5f, 1.0f, 0.5f, 0.5f,// top left
-        -0.5f, -0.5f, -0.5f, 1.0f, 0.5f, 0.5f,// bottom left
-        0.5f, -0.5f, -0.5f, 1.0f, 0.5f, 0.5, // bottom right
+        -0.5f, 0.5f, -0.5f, 1.0f, 0.5f, 0.5f, 0.0f, 1.0f, // top left
+        -0.5f, -0.5f, -0.5f, 1.0f, 0.5f, 0.5f, 0.0f, 0.0f, // bottom left
+        0.5f, -0.5f, -0.5f, 1.0f, 0.5f, 0.5, 1.0f, 0.0f, // bottom right
     // left side (green, x-axis static)
         // top triangle
-        0.5f, 0.5f, 0.5f, 0.5f, 1.0f, 0.5f, // top right
-        0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 0.5f, // bottom right
-        0.5f, -0.5f, 0.5f, 0.5f, 1.0f, 0.5f,// top left
+        0.5f, 0.5f, 0.5f, 0.5f, 1.0f, 0.5f, 1.0f, 1.0f, // top right
+        0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 0.5f, 1.0f, 0.0f, // bottom right
+        0.5f, -0.5f, 0.5f, 0.5f, 1.0f, 0.5f, 0.0f, 1.0f, // top left
         // bottom triangle
-        0.5f, -0.5f, 0.5f, 0.5f, 1.0f, 0.5f,// top left
-        0.5f, -0.5f, -0.5f, 0.5f, 1.0f, 0.5f,// bottom left
-        0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 0.5f, // bottom right
+        0.5f, -0.5f, 0.5f, 0.5f, 1.0f, 0.5f, 0.0f, 1.0f, // top left
+        0.5f, -0.5f, -0.5f, 0.5f, 1.0f, 0.5f, 0.0f, 0.0f, // bottom left
+        0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 0.5f, 1.0f, 0.0f, // bottom right
     // right side (green, x-axis static)
         // top triangle
-        -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, // top right
-        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom right
-        -0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f,// top left
+        -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, // top right
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // top left
         // bottom triangle
-        -0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f,// top left
-        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f,// bottom left
-        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // top left
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, // bottom left
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
     // top side (blue, x-axis static)
         // top triangle
-        0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, // top right
-        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom right
-        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,// top left
+        0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // top right
+        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, // bottom right
+        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, // top left
         // bottom triangle
-        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f,// top left
-        -0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f,// bottom left
-        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom right
+        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, // top left
+        -0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, // bottom right
     // bottom side (blue, y-axis static)
         // top triangle
-        0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 1.0f, // top right
-        0.5f, -0.5f, -0.5f, .5f, 0.5f, 1.0f, // bottom right
-        -0.5f, -0.5f, 0.5, 0.5f, 0.5f, 1.0f,// top left
+        0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 1.0f, // top right
+        0.5f, -0.5f, -0.5f, .5f, 0.5f, 1.0f, 1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.5, 0.5f, 0.5f, 1.0f, 0.0f, 1.0f, // top left
         // bottom triangle
-        -0.5f, -0.5f, 0.5f, .5f, 0.5f, 1.0f,// top left
-        -0.5f, -0.5f, -0.5f, .5f, 0.5f, 1.0f,// bottom left
-        0.5f, -0.5f, -0.5f, .5f, 0.5f, 1.0f, // bottom right
+        -0.5f, -0.5f, 0.5f, .5f, 0.5f, 1.0f, 0.0f, 1.0f, // top left
+        -0.5f, -0.5f, -0.5f, .5f, 0.5f, 1.0f, 0.0f, 0.0f, // bottom left
+        0.5f, -0.5f, -0.5f, .5f, 0.5f, 1.0f, 1.0f, 0.0f, // bottom right
     };
 
     vec3 cubePositions[] = {
@@ -139,11 +142,14 @@ int main(void) {
     "uniform mat4 MVP;\n"
     "layout (location = 0) in vec3 aPos;\n"
     "layout (location = 1) in vec3 aColor;\n"
+    "layout (location = 2) in vec2 aTexCoord;\n"
     "out vec3 ourColor;\n"
+    "out vec2 TexCoord;\n"
     "void main()\n"
     "{\n"
     " gl_Position = MVP * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
     "ourColor = aColor;\n"
+    "TexCoord = aTexCoord;\n"
     "}\0";
 
     // create shader object and compile vertex shader code into it
@@ -167,9 +173,11 @@ int main(void) {
     const char *fragmentShaderSource = "#version 330\n"
     "out vec4 FragColor;\n"
     "in vec3 ourColor;\n"
+    "in vec2 TexCoord;\n"
+    "uniform sampler2D ourTexture;\n"
     "void main()\n"
     "{\n"
-    "FragColor = vec4(ourColor, 1.0f);\n"
+    "FragColor = texture(ourTexture, TexCoord) * vec4(ourColor, 1.0f);\n"
     "}\0";
 
     // create shader object and compile fragment shader code into it
@@ -206,10 +214,36 @@ int main(void) {
     glEnable(GL_DEPTH_TEST);
 
     // telling OpenGL how to interpret the data from vertex buffer
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),(void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float),(void*)0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float),(void*)(3*sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float),(void*)(3*sizeof(float)));
     glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float),(void*)(6*sizeof(float)));
+    glEnableVertexAttribArray(2);
+
+    // texture loading
+    unsigned int texture;
+    glGenTextures(1, &texture);
+    glBindTexture(GL_TEXTURE_2D, texture);
+    // texture wrapping/filtering options
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    // loading image
+    int width, height, nrChannels;
+    // flip vertically
+    stbi_set_flip_vertically_on_load(true);
+    unsigned char *data = stbi_load("./assets/wall.jpg", &width, &height, &nrChannels, 0);
+    if (data) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+        glGenerateMipmap(GL_TEXTURE_2D);
+    } else {
+        printf("Failed to load texture\n");
+        return -1;
+    }
+    stbi_image_free(data);
+
 
     // bind shader MVP variable to mvp_location variable in OpenGL
     mvp_location = glGetUniformLocation(shaderProgram, "MVP");

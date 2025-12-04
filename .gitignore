@@ -7,5 +7,5 @@ linmath.h
 *.png
 *.jpg
 *.jpeg
-
+stb_image.h
 
