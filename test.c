@@ -19,6 +19,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void print_mat4x4(const mat4x4 M);
 void processInput(GLFWwindow *window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
+void load_text(char *filename, char *buf, int max_size);
 
 vec3 camPos = {0.0f, 1.0f , 1.0f};
 vec3 camTarget = {0.0f, 0.0f , -1.0f};
@@ -129,25 +130,16 @@ int main(void) {
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    // vertex shader GLSL code
-    const char *vertexShaderSource = "#version 330\n"
-    "uniform mat4 MVP;\n"
-    "layout (location = 0) in vec3 aPos;\n"
-    "layout (location = 1) in vec3 aColor;\n"
-    "layout (location = 2) in vec2 aTexCoord;\n"
-    "out vec3 ourColor;\n"
-    "out vec2 TexCoord;\n"
-    "void main()\n"
-    "{\n"
-    " gl_Position = MVP * vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-    "ourColor = aColor;\n"
-    "TexCoord = aTexCoord;\n"
-    "}\0";
-
     // create shader object and compile vertex shader code into it
     unsigned int vertexShader;
     vertexShader = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+
+    // load vertex shader file
+    char *buf = malloc(8192);
+    load_text("texture.vert", buf, 8192);
+    //printf("%s\n", buf);
+
+    glShaderSource(vertexShader, 1, (const GLchar**)&buf, NULL);
     glCompileShader(vertexShader);
 
     // checking if it compiled succesfully
@@ -161,21 +153,15 @@ int main(void) {
         return -1;
     }
 
-    // fragment shader GLSL code
-    const char *fragmentShaderSource = "#version 330\n"
-    "out vec4 FragColor;\n"
-    "in vec3 ourColor;\n"
-    "in vec2 TexCoord;\n"
-    "uniform sampler2D ourTexture;\n"
-    "void main()\n"
-    "{\n"
-    "FragColor = texture(ourTexture, TexCoord) * vec4(ourColor, 1.0f);\n"
-    "}\0";
-
     // create shader object and compile fragment shader code into it
     unsigned int fragmentShader;
     fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+
+    // load fragment shader file
+    load_text("texture.frag", buf, 8192);
+    //printf("%s\n", buf);
+
+    glShaderSource(fragmentShader, 1, (const GLchar**)&buf, NULL);
     glCompileShader(fragmentShader);
 
     // check for errors
@@ -454,4 +440,26 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
     direction[2] = sinf(radYaw) * cosf(radPitch);
     vec3_norm(camTarget, direction);
     //printf("Direction x: %f, y: %f, z: %f\n",direction[0], direction[1], direction[2]);
+}
+
+void load_text(char *filename, char *buf, int max_size)
+{
+    FILE *file_ptr;
+
+    // Character buffer that stores the read character
+    // till the next iteration
+    char ch;
+
+    // Opening file in reading mode
+    file_ptr = fopen(filename, "r");
+
+    int i = 0;
+    // character by character using loop.
+    while ((ch = fgetc(file_ptr)) != EOF && i<max_size)
+        buf[i++] = ch;
+
+    buf[i] = '\0';
+
+    // Closing the file
+    fclose(file_ptr);
 }
