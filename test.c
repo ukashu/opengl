@@ -171,7 +171,7 @@ int main(void) {
 
     // load vertex shader file
     char *buf = malloc(8192);
-    load_text("lighting.vert", buf, 8192);
+    load_text("texture.vert", buf, 8192);
     //printf("%s\n", buf);
 
     glShaderSource(vertexShader_textured, 1, (const GLchar**)&buf, NULL);
@@ -193,7 +193,7 @@ int main(void) {
     fragmentShader_textured = glCreateShader(GL_FRAGMENT_SHADER);
 
     // load fragment shader file
-    load_text("lighting.frag", buf, 8192);
+    load_text("texture.frag", buf, 8192);
     //printf("%s\n", buf);
 
     glShaderSource(fragmentShader_textured, 1, (const GLchar**)&buf, NULL);
@@ -217,6 +217,59 @@ int main(void) {
     glGetProgramiv(shaderProgram_textured, GL_LINK_STATUS, &success);
         if(!success) {
         glGetProgramInfoLog(shaderProgram_textured, 512, NULL, infoLog);
+        printf("ERROR::SHADER::PROGRAM::FAILED\n");
+        return -1;
+    }
+
+    // Creating the shaders for lit up cube
+    unsigned int vertexShader_lighting;
+    vertexShader_lighting = glCreateShader(GL_VERTEX_SHADER);
+
+    // load vertex shader file
+    load_text("lighting.vert", buf, 8192);
+    //printf("%s\n", buf);
+
+    glShaderSource(vertexShader_lighting, 1, (const GLchar**)&buf, NULL);
+    glCompileShader(vertexShader_lighting);
+
+    // checking if it compiled succesfully
+    glGetShaderiv(vertexShader_lighting, GL_COMPILE_STATUS, &success);
+    if(!success)
+    {
+        glGetShaderInfoLog(vertexShader_lighting, 512, NULL, infoLog);
+        printf("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n");
+        return -1;
+    }
+
+    // create shader object and compile fragment shader code into it
+    unsigned int fragmentShader_lighting;
+    fragmentShader_lighting = glCreateShader(GL_FRAGMENT_SHADER);
+
+    // load fragment shader file
+    load_text("lighting.frag", buf, 8192);
+    //printf("%s\n", buf);
+
+    glShaderSource(fragmentShader_lighting, 1, (const GLchar**)&buf, NULL);
+    glCompileShader(fragmentShader_lighting);
+
+    // check for errors
+    glGetShaderiv(fragmentShader_textured, GL_COMPILE_STATUS, &success);
+    if(!success)
+    {
+        glGetShaderInfoLog(fragmentShader_lighting, 512, NULL, infoLog);
+        printf("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n");
+        return -1;
+    }
+
+    // attaching and linking the shaders to a shader program
+    unsigned int shaderProgram_lighting;
+    shaderProgram_lighting = glCreateProgram();
+    glAttachShader(shaderProgram_lighting, vertexShader_lighting);
+    glAttachShader(shaderProgram_lighting, fragmentShader_lighting);
+    glLinkProgram(shaderProgram_lighting);
+    glGetProgramiv(shaderProgram_lighting, GL_LINK_STATUS, &success);
+        if(!success) {
+        glGetProgramInfoLog(shaderProgram_lighting, 512, NULL, infoLog);
         printf("ERROR::SHADER::PROGRAM::FAILED\n");
         return -1;
     }
@@ -330,8 +383,8 @@ int main(void) {
     // bind shader MVP variable to mvp_location variable in OpenGL
     mvp_location = glGetUniformLocation(shaderProgram_textured, "MVP");
     GLint mvp_location_lightSource = glGetUniformLocation(shaderProgram_lightSource, "MVP");
-    GLint objectColor_location = glGetUniformLocation(shaderProgram_textured, "objectColor");
-    GLint lightColor_location = glGetUniformLocation(shaderProgram_textured, "lightColor");
+    GLint objectColor_location = glGetUniformLocation(shaderProgram_lighting, "objectColor");
+    GLint lightColor_location = glGetUniformLocation(shaderProgram_lighting, "lightColor");
 
     // camera view variable declaration
     mat4x4 LookAt;
@@ -415,8 +468,8 @@ int main(void) {
                 cubePositions[i][2]);
 
             if (i == 0) {
-                //glBindTexture(GL_TEXTURE_2D, texture);
-                glUseProgram(shaderProgram_textured);
+                // lit up cube
+                glUseProgram(shaderProgram_lighting);
                 glBindVertexArray(VAO_textured);
                 glUniform3f(objectColor_location, 1.0f, 0.5f, 0.31f);
                 glUniform3f(lightColor_location,1.0f, 0.5f, 0.31f);
@@ -437,6 +490,15 @@ int main(void) {
 
                 mat4x4_mul(mvp, vp, m);
                 glUniformMatrix4fv(mvp_location_lightSource, 1, GL_FALSE, (const float*)mvp);
+            } else {
+                // textured cube
+                glBindTexture(GL_TEXTURE_2D, texture);
+                glUseProgram(shaderProgram_textured);
+                glBindVertexArray(VAO_textured);
+                glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const float*)mvp);
+
+                mat4x4_mul(mvp, vp, m);
+                glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const float*)mvp);
             }
 
             glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/(6*sizeof(float)));
