@@ -121,7 +121,8 @@ int main(void) {
 
     vec3 cubePositions[] = {
         { -3.0f, 0.0f, 0.0f },
-        { -1.0f, 0.0f, 0.0f }
+        { -1.0f, 0.0f, 0.0f },
+        { 0.0f, 2.0f, 2.0f }
     };
 
 
@@ -156,7 +157,15 @@ int main(void) {
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float),(void*)(9*sizeof(float)));
     glEnableVertexAttribArray(2);
 
-    // create shader object and compile vertex shader code into it
+    // create a VBO without textures
+    unsigned int VAO_lightSource;
+    glGenVertexArrays(1, &VAO_lightSource);
+    glBindVertexArray(VAO_lightSource);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float),(void*)0);
+    glEnableVertexAttribArray(0);
+
+    // Creating the shaders for textured cube
     unsigned int vertexShader_textured;
     vertexShader_textured = glCreateShader(GL_VERTEX_SHADER);
 
@@ -208,6 +217,59 @@ int main(void) {
     glGetProgramiv(shaderProgram_textured, GL_LINK_STATUS, &success);
         if(!success) {
         glGetProgramInfoLog(shaderProgram_textured, 512, NULL, infoLog);
+        printf("ERROR::SHADER::PROGRAM::FAILED\n");
+        return -1;
+    }
+
+    // Creating light source shader
+    unsigned int vertexShader_lightSource;
+    vertexShader_lightSource = glCreateShader(GL_VERTEX_SHADER);
+
+    // load vertex shader file
+    load_text("light_source.vert", buf, 8192);
+    //printf("%s\n", buf);
+
+    glShaderSource(vertexShader_lightSource, 1, (const GLchar**)&buf, NULL);
+    glCompileShader(vertexShader_lightSource);
+
+    // checking if it compiled succesfully
+    glGetShaderiv(vertexShader_lightSource, GL_COMPILE_STATUS, &success);
+    if(!success)
+    {
+        glGetShaderInfoLog(vertexShader_lightSource, 512, NULL, infoLog);
+        printf("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n");
+        return -1;
+    }
+
+    // create shader object and compile fragment shader code into it
+    unsigned int fragmentShader_lightSource;
+    fragmentShader_lightSource = glCreateShader(GL_FRAGMENT_SHADER);
+
+    // load fragment shader file
+    load_text("light_source.frag", buf, 8192);
+    //printf("%s\n", buf);
+
+    glShaderSource(fragmentShader_lightSource, 1, (const GLchar**)&buf, NULL);
+    glCompileShader(fragmentShader_lightSource);
+
+    // check for errors
+    glGetShaderiv(fragmentShader_textured, GL_COMPILE_STATUS, &success);
+    if(!success)
+    {
+        glGetShaderInfoLog(fragmentShader_lightSource, 512, NULL, infoLog);
+        printf("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n");
+        return -1;
+    }
+
+    // attaching and linking the shaders to a shader program
+    unsigned int shaderProgram_lightSource;
+    shaderProgram_lightSource = glCreateProgram();
+    glAttachShader(shaderProgram_lightSource, vertexShader_lightSource);
+    glAttachShader(shaderProgram_lightSource, fragmentShader_lightSource);
+    glLinkProgram(shaderProgram_lightSource);
+    glGetProgramiv(shaderProgram_lightSource, GL_LINK_STATUS, &success);
+        if(!success) {
+        glGetProgramInfoLog(shaderProgram_lightSource, 512, NULL, infoLog);
         printf("ERROR::SHADER::PROGRAM::FAILED\n");
         return -1;
     }
@@ -265,9 +327,9 @@ int main(void) {
     }
     stbi_image_free(data);
 
-
     // bind shader MVP variable to mvp_location variable in OpenGL
     mvp_location = glGetUniformLocation(shaderProgram_textured, "MVP");
+    GLint mvp_location_lightSource = glGetUniformLocation(shaderProgram_lightSource, "MVP");
 
     // camera view variable declaration
     mat4x4 LookAt;
@@ -289,7 +351,7 @@ int main(void) {
         processInput(window);
         float ratio;
         int width, height;
-        mat4x4 m,p,vp,mvp;
+        mat4x4 p,vp;
 
         glfwGetFramebufferSize(window, &width, &height);
         ratio = width / (float) height;
@@ -297,7 +359,6 @@ int main(void) {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         // create an identity matrix and save into variable m
-        mat4x4_identity(m);
         //mat4x4_rotate_X(m, m, (float)glfwGetTime());
         //mat4x4 temp;
         //mat4x4_translate(temp, sin((float)glfwGetTime()), 0.0f, 0.0f);
@@ -341,9 +402,8 @@ int main(void) {
         mat4x4_translate_in_place(LookAt, -camPos[0], -camPos[1], -camPos[2]);
 
         mat4x4_mul(vp, p, LookAt);
-
         
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 3; i++)
         {
             mat4x4 m, mvp;
 
@@ -353,19 +413,35 @@ int main(void) {
                 cubePositions[i][1],
                 cubePositions[i][2]);
 
-            mat4x4_mul(mvp, vp, m);
-
             if (i == 0) {
                 glBindTexture(GL_TEXTURE_2D, texture);
                 glUseProgram(shaderProgram_textured);
                 glBindVertexArray(VAO_textured);
+
+                mat4x4_mul(mvp, vp, m);
+                glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const float*)mvp);
+            } else if (i == 2) {
+                // light source
+                glUseProgram(shaderProgram_lightSource);
+                glBindVertexArray(VAO_lightSource);
+                mat4x4 temp;
+
+                mat4x4_identity(temp);
+
+                mat4x4_scale_aniso(temp, temp, 0.4f, 0.4f, 0.4f);
+                mat4x4_mul(m, m, temp);
+
+                mat4x4_mul(mvp, vp, m);
+                glUniformMatrix4fv(mvp_location_lightSource, 1, GL_FALSE, (const float*)mvp);
             } else {
                 glBindTexture(GL_TEXTURE_2D, texture2);
                 glUseProgram(shaderProgram_textured);
                 glBindVertexArray(VAO_textured);
+
+                mat4x4_mul(mvp, vp, m);
+                glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const float*)mvp);
             }
 
-            glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const float*)mvp);
             glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/(6*sizeof(float)));
         }
 
