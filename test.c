@@ -34,6 +34,12 @@ float pitch = 0.0f;
 bool firstMouse = true;
 float lastX = 400, lastY = 300;
 
+vec3 cubePositions[] = {
+    { -3.0f, 0.0f, 0.0f },
+    { -1.0f, 0.0f, 0.0f },
+    { 0.0f, 2.0f, 2.0f }
+};
+
 int main(void) {
     GLint mvp_location;
 
@@ -83,22 +89,22 @@ int main(void) {
         0.5f, -0.5f, -0.5f, 1.0f, 0.5f, 0.5, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, // bottom right
     // left side (green, x-axis static)
         // top triangle
-        0.5f, 0.5f, 0.5f, 0.5f, 1.0f, 0.5f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f, // top right
-        0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 0.5f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, // bottom right
-        0.5f, -0.5f, 0.5f, 0.5f, 1.0f, 0.5f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, // top left
+        0.5f, 0.5f, 0.5f, 0.5f, 1.0f, 0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, // top right
+        0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 0.5f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom right
+        0.5f, -0.5f, 0.5f, 0.5f, 1.0f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, // top left
         // bottom triangle
-        0.5f, -0.5f, 0.5f, 0.5f, 1.0f, 0.5f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, // top left
-        0.5f, -0.5f, -0.5f, 0.5f, 1.0f, 0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, // bottom left
-        0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 0.5f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, // bottom right
+        0.5f, -0.5f, 0.5f, 0.5f, 1.0f, 0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, // top left
+        0.5f, -0.5f, -0.5f, 0.5f, 1.0f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+        0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 0.5f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom right
     // right side (green, x-axis static)
         // top triangle
-        -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, // top right
-        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom right
-        -0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, // top left
+        -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f, // top right
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, // top left
         // bottom triangle
-        -0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, // top left
-        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, // top left
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, // bottom left
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, // bottom right
     // top side (blue, x-axis static)
         // top triangle
         0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, // top right
@@ -119,11 +125,6 @@ int main(void) {
         0.5f, -0.5f, -0.5f, .5f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, // bottom right
     };
 
-    vec3 cubePositions[] = {
-        { -3.0f, 0.0f, 0.0f },
-        { -1.0f, 0.0f, 0.0f },
-        { 0.0f, 2.0f, 2.0f }
-    };
 
 
     unsigned int VBO;
@@ -144,18 +145,8 @@ int main(void) {
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float),(void*)(6*sizeof(float)));
     glEnableVertexAttribArray(2);
-
-    // create a VBO without textures
-    unsigned int VAO_untextured;
-    glGenVertexArrays(1, &VAO_untextured);
-    glBindVertexArray(VAO_untextured);
-
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float),(void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float),(void*)(3*sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float),(void*)(9*sizeof(float)));
-    glEnableVertexAttribArray(2);
+    glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float),(void*)(8*sizeof(float)));
+    glEnableVertexAttribArray(3);
 
     // create a VBO without textures
     unsigned int VAO_lightSource;
@@ -226,7 +217,7 @@ int main(void) {
     vertexShader_lighting = glCreateShader(GL_VERTEX_SHADER);
 
     // load vertex shader file
-    load_text("lighting.vert", buf, 8192);
+    load_text("diffuse.vert", buf, 8192);
     //printf("%s\n", buf);
 
     glShaderSource(vertexShader_lighting, 1, (const GLchar**)&buf, NULL);
@@ -246,7 +237,7 @@ int main(void) {
     fragmentShader_lighting = glCreateShader(GL_FRAGMENT_SHADER);
 
     // load fragment shader file
-    load_text("lighting.frag", buf, 8192);
+    load_text("diffuse.frag", buf, 8192);
     //printf("%s\n", buf);
 
     glShaderSource(fragmentShader_lighting, 1, (const GLchar**)&buf, NULL);
@@ -386,6 +377,9 @@ int main(void) {
     GLint objectColor_location = glGetUniformLocation(shaderProgram_lighting, "objectColor");
     GLint lightColor_location = glGetUniformLocation(shaderProgram_lighting, "lightColor");
 
+    GLint lightPos_location = glGetUniformLocation(shaderProgram_lighting, "lightPos");
+    GLint model_location = glGetUniformLocation(shaderProgram_lighting, "model");
+
     // camera view variable declaration
     mat4x4 LookAt;
     vec3_sub(camDir, camPos, camTarget);
@@ -473,11 +467,13 @@ int main(void) {
                 glBindVertexArray(VAO_textured);
                 glUniform3f(objectColor_location, 1.0f, 0.5f, 0.31f);
                 glUniform3f(lightColor_location,1.0f, 0.5f, 0.31f);
+                glUniform3f(lightPos_location, cubePositions[2][0], cubePositions[2][1], cubePositions[2][2]);
+                glUniformMatrix4fv(model_location, 1, GL_FALSE, (const float*)m);
                 glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const float*)mvp);
 
                 mat4x4_mul(mvp, vp, m);
                 glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const float*)mvp);
-            } else if (i == 1) {
+            } else if (i == 2) {
                 // light source
                 glUseProgram(shaderProgram_lightSource);
                 glBindVertexArray(VAO_lightSource);
@@ -551,6 +547,19 @@ void processInput(GLFWwindow *window)
         vec3 temp;
         vec3_scale(temp, camRight, -cameraSpeed);
         vec3_sub(camPos, camPos, temp);
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
+        //move light source
+        cubePositions[2][0] -= cameraSpeed;
+    }
+    if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
+        cubePositions[2][0] += cameraSpeed;
+    }
+    if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
+        cubePositions[2][1] -= cameraSpeed;
+    }
+    if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+        cubePositions[2][1] += cameraSpeed;
     }
 }
 
