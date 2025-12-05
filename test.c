@@ -171,7 +171,7 @@ int main(void) {
 
     // load vertex shader file
     char *buf = malloc(8192);
-    load_text("texture.vert", buf, 8192);
+    load_text("lighting.vert", buf, 8192);
     //printf("%s\n", buf);
 
     glShaderSource(vertexShader_textured, 1, (const GLchar**)&buf, NULL);
@@ -193,7 +193,7 @@ int main(void) {
     fragmentShader_textured = glCreateShader(GL_FRAGMENT_SHADER);
 
     // load fragment shader file
-    load_text("texture.frag", buf, 8192);
+    load_text("lighting.frag", buf, 8192);
     //printf("%s\n", buf);
 
     glShaderSource(fragmentShader_textured, 1, (const GLchar**)&buf, NULL);
@@ -330,6 +330,8 @@ int main(void) {
     // bind shader MVP variable to mvp_location variable in OpenGL
     mvp_location = glGetUniformLocation(shaderProgram_textured, "MVP");
     GLint mvp_location_lightSource = glGetUniformLocation(shaderProgram_lightSource, "MVP");
+    GLint objectColor_location = glGetUniformLocation(shaderProgram_textured, "objectColor");
+    GLint lightColor_location = glGetUniformLocation(shaderProgram_textured, "lightColor");
 
     // camera view variable declaration
     mat4x4 LookAt;
@@ -357,7 +359,6 @@ int main(void) {
         ratio = width / (float) height;
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
         // create an identity matrix and save into variable m
         //mat4x4_rotate_X(m, m, (float)glfwGetTime());
         //mat4x4 temp;
@@ -414,13 +415,16 @@ int main(void) {
                 cubePositions[i][2]);
 
             if (i == 0) {
-                glBindTexture(GL_TEXTURE_2D, texture);
+                //glBindTexture(GL_TEXTURE_2D, texture);
                 glUseProgram(shaderProgram_textured);
                 glBindVertexArray(VAO_textured);
+                glUniform3f(objectColor_location, 1.0f, 0.5f, 0.31f);
+                glUniform3f(lightColor_location,1.0f, 0.5f, 0.31f);
+                glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const float*)mvp);
 
                 mat4x4_mul(mvp, vp, m);
                 glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const float*)mvp);
-            } else if (i == 2) {
+            } else if (i == 1) {
                 // light source
                 glUseProgram(shaderProgram_lightSource);
                 glBindVertexArray(VAO_lightSource);
@@ -433,13 +437,6 @@ int main(void) {
 
                 mat4x4_mul(mvp, vp, m);
                 glUniformMatrix4fv(mvp_location_lightSource, 1, GL_FALSE, (const float*)mvp);
-            } else {
-                glBindTexture(GL_TEXTURE_2D, texture2);
-                glUseProgram(shaderProgram_textured);
-                glBindVertexArray(VAO_textured);
-
-                mat4x4_mul(mvp, vp, m);
-                glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const float*)mvp);
             }
 
             glDrawArrays(GL_TRIANGLES, 0, sizeof(vertices)/(6*sizeof(float)));
