@@ -123,12 +123,23 @@ int main(void) {
         { -3.0f, 0.0f, 0.0f },
         { -1.0f, 0.0f, 0.0f }
     };
-    
+
+    unsigned int VAO;
+    glGenVertexArrays(1, &VAO);
+    glBindVertexArray(VAO);
 
     unsigned int VBO;
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    // telling OpenGL how to interpret the data from vertex buffer
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float),(void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float),(void*)(3*sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float),(void*)(6*sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     // create shader object and compile vertex shader code into it
     unsigned int vertexShader;
@@ -191,13 +202,6 @@ int main(void) {
     //glDeleteShader(fragmentShader); 
     glEnable(GL_DEPTH_TEST);
 
-    // telling OpenGL how to interpret the data from vertex buffer
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float),(void*)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float),(void*)(3*sizeof(float)));
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float),(void*)(6*sizeof(float)));
-    glEnableVertexAttribArray(2);
 
     // texture loading
     unsigned int texture, texture2;
@@ -324,6 +328,7 @@ int main(void) {
         mat4x4_mul(vp, p, LookAt);
 
         glUseProgram(shaderProgram);
+        glBindVertexArray(VAO);
         
         for (int i = 0; i < 2; i++)
         {
