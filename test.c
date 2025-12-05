@@ -237,7 +237,7 @@ int main(void) {
     fragmentShader_lighting = glCreateShader(GL_FRAGMENT_SHADER);
 
     // load fragment shader file
-    load_text("diffuse.frag", buf, 8192);
+    load_text("specular.frag", buf, 8192);
     //printf("%s\n", buf);
 
     glShaderSource(fragmentShader_lighting, 1, (const GLchar**)&buf, NULL);
@@ -379,6 +379,7 @@ int main(void) {
 
     GLint lightPos_location = glGetUniformLocation(shaderProgram_lighting, "lightPos");
     GLint model_location = glGetUniformLocation(shaderProgram_lighting, "model");
+    GLint viewPos_location = glGetUniformLocation(shaderProgram_lighting, "viewPos");
 
     // camera view variable declaration
     mat4x4 LookAt;
@@ -468,6 +469,7 @@ int main(void) {
                 glUniform3f(objectColor_location, 1.0f, 0.5f, 0.31f);
                 glUniform3f(lightColor_location,1.0f, 0.5f, 0.31f);
                 glUniform3f(lightPos_location, cubePositions[2][0], cubePositions[2][1], cubePositions[2][2]);
+                glUniform3f(viewPos_location, camPos[0], camPos[1], camPos[2]);
                 glUniformMatrix4fv(model_location, 1, GL_FALSE, (const float*)m);
                 glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const float*)mvp);
 
