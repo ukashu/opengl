@@ -64,59 +64,59 @@ int main(void) {
 
     float vertices[] = {
     // front side (red, z-axis static)
-        // top triangle
-        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, // top right
-        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
-        -0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // top left
+        // top triangle                                // normals
+        0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, // top right
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom right
+        -0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // top left
         // bottom triangle
-        -0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // top left
-        -0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // bottom left
-        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
+        -0.5f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // top left
+        -0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom left
+        0.5f, -0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, // bottom right
     // back side (red, z-axis static)
         // top triangle
-        0.5f, 0.5f, -0.5f, 1.0f, 0.5f, 0.5f, 1.0f, 1.0f, // top right
-        0.5f, -0.5f, -0.5f, 1.0f, 0.5f, 0.5f, 1.0f, 0.0f, // bottom right
-        -0.5f, 0.5f, -0.5f, 1.0f, 0.5f, 0.5f, 0.0f, 1.0f, // top left
+        0.5f, 0.5f, -0.5f, 1.0f, 0.5f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f, // top right
+        0.5f, -0.5f, -0.5f, 1.0f, 0.5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, // bottom right
+        -0.5f, 0.5f, -0.5f, 1.0f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, // top left
         // bottom triangle
-        -0.5f, 0.5f, -0.5f, 1.0f, 0.5f, 0.5f, 0.0f, 1.0f, // top left
-        -0.5f, -0.5f, -0.5f, 1.0f, 0.5f, 0.5f, 0.0f, 0.0f, // bottom left
-        0.5f, -0.5f, -0.5f, 1.0f, 0.5f, 0.5, 1.0f, 0.0f, // bottom right
+        -0.5f, 0.5f, -0.5f, 1.0f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, -1.0f, // top left
+        -0.5f, -0.5f, -0.5f, 1.0f, 0.5f, 0.5f, 0.0f, 0.0f, 0.0f, 0.0f, -1.0f, // bottom left
+        0.5f, -0.5f, -0.5f, 1.0f, 0.5f, 0.5, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, // bottom right
     // left side (green, x-axis static)
         // top triangle
-        0.5f, 0.5f, 0.5f, 0.5f, 1.0f, 0.5f, 1.0f, 1.0f, // top right
-        0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 0.5f, 1.0f, 0.0f, // bottom right
-        0.5f, -0.5f, 0.5f, 0.5f, 1.0f, 0.5f, 0.0f, 1.0f, // top left
+        0.5f, 0.5f, 0.5f, 0.5f, 1.0f, 0.5f, 1.0f, 1.0f, -1.0f, 0.0f, 0.0f, // top right
+        0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 0.5f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, // bottom right
+        0.5f, -0.5f, 0.5f, 0.5f, 1.0f, 0.5f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, // top left
         // bottom triangle
-        0.5f, -0.5f, 0.5f, 0.5f, 1.0f, 0.5f, 0.0f, 1.0f, // top left
-        0.5f, -0.5f, -0.5f, 0.5f, 1.0f, 0.5f, 0.0f, 0.0f, // bottom left
-        0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 0.5f, 1.0f, 0.0f, // bottom right
+        0.5f, -0.5f, 0.5f, 0.5f, 1.0f, 0.5f, 0.0f, 1.0f, -1.0f, 0.0f, 0.0f, // top left
+        0.5f, -0.5f, -0.5f, 0.5f, 1.0f, 0.5f, 0.0f, 0.0f, -1.0f, 0.0f, 0.0f, // bottom left
+        0.5f, 0.5f, -0.5f, 0.5f, 1.0f, 0.5f, 1.0f, 0.0f, -1.0f, 0.0f, 0.0f, // bottom right
     // right side (green, x-axis static)
         // top triangle
-        -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, // top right
-        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
-        -0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // top left
+        -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f, // top right
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, // top left
         // bottom triangle
-        -0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, // top left
-        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, // bottom left
-        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, // top left
+        -0.5f, -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom right
     // top side (blue, x-axis static)
         // top triangle
-        0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // top right
-        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, // bottom right
-        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, // top left
+        0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f, 0.0f, // top right
+        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
+        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // top left
         // bottom triangle
-        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, // top left
-        -0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, // bottom left
-        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, // bottom right
+        -0.5f, 0.5f, 0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // top left
+        -0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom left
+        0.5f, 0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 0.0f, 1.0f, 0.0f, // bottom right
     // bottom side (blue, y-axis static)
         // top triangle
-        0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 1.0f, // top right
-        0.5f, -0.5f, -0.5f, .5f, 0.5f, 1.0f, 1.0f, 0.0f, // bottom right
-        -0.5f, -0.5f, 0.5, 0.5f, 0.5f, 1.0f, 0.0f, 1.0f, // top left
+        0.5f, -0.5f, 0.5f, 0.5f, 0.5f, 1.0f, 1.0f, 1.0f, 0.0f, -1.0f, 0.0f, // top right
+        0.5f, -0.5f, -0.5f, .5f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.5, 0.5f, 0.5f, 1.0f, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f, // top left
         // bottom triangle
-        -0.5f, -0.5f, 0.5f, .5f, 0.5f, 1.0f, 0.0f, 1.0f, // top left
-        -0.5f, -0.5f, -0.5f, .5f, 0.5f, 1.0f, 0.0f, 0.0f, // bottom left
-        0.5f, -0.5f, -0.5f, .5f, 0.5f, 1.0f, 1.0f, 0.0f, // bottom right
+        -0.5f, -0.5f, 0.5f, .5f, 0.5f, 1.0f, 0.0f, 1.0f, 0.0f, -1.0f, 0.0f, // top left
+        -0.5f, -0.5f, -0.5f, .5f, 0.5f, 1.0f, 0.0f, 0.0f, 0.0f, -1.0f, 0.0f, // bottom left
+        0.5f, -0.5f, -0.5f, .5f, 0.5f, 1.0f, 1.0f, 0.0f, 0.0f, -1.0f, 0.0f, // bottom right
     };
 
     vec3 cubePositions[] = {
@@ -124,75 +124,90 @@ int main(void) {
         { -1.0f, 0.0f, 0.0f }
     };
 
-    unsigned int VAO;
-    glGenVertexArrays(1, &VAO);
-    glBindVertexArray(VAO);
 
     unsigned int VBO;
     glGenBuffers(1, &VBO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
+    // create a textured VAO
+
+    unsigned int VAO_textured;
+    glGenVertexArrays(1, &VAO_textured);
+    glBindVertexArray(VAO_textured);
+
     // telling OpenGL how to interpret the data from vertex buffer
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float),(void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float),(void*)0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float),(void*)(3*sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float),(void*)(3*sizeof(float)));
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float),(void*)(6*sizeof(float)));
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 11 * sizeof(float),(void*)(6*sizeof(float)));
+    glEnableVertexAttribArray(2);
+
+    // create a VBO without textures
+    unsigned int VAO_untextured;
+    glGenVertexArrays(1, &VAO_untextured);
+    glBindVertexArray(VAO_untextured);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float),(void*)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float),(void*)(3*sizeof(float)));
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 11 * sizeof(float),(void*)(9*sizeof(float)));
     glEnableVertexAttribArray(2);
 
     // create shader object and compile vertex shader code into it
-    unsigned int vertexShader;
-    vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    unsigned int vertexShader_textured;
+    vertexShader_textured = glCreateShader(GL_VERTEX_SHADER);
 
     // load vertex shader file
     char *buf = malloc(8192);
     load_text("texture.vert", buf, 8192);
     //printf("%s\n", buf);
 
-    glShaderSource(vertexShader, 1, (const GLchar**)&buf, NULL);
-    glCompileShader(vertexShader);
+    glShaderSource(vertexShader_textured, 1, (const GLchar**)&buf, NULL);
+    glCompileShader(vertexShader_textured);
 
     // checking if it compiled succesfully
     int success;
     char infoLog[512];
-    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    glGetShaderiv(vertexShader_textured, GL_COMPILE_STATUS, &success);
     if(!success)
     {
-        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        glGetShaderInfoLog(vertexShader_textured, 512, NULL, infoLog);
         printf("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n");
         return -1;
     }
 
     // create shader object and compile fragment shader code into it
-    unsigned int fragmentShader;
-    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    unsigned int fragmentShader_textured;
+    fragmentShader_textured = glCreateShader(GL_FRAGMENT_SHADER);
 
     // load fragment shader file
     load_text("texture.frag", buf, 8192);
     //printf("%s\n", buf);
 
-    glShaderSource(fragmentShader, 1, (const GLchar**)&buf, NULL);
-    glCompileShader(fragmentShader);
+    glShaderSource(fragmentShader_textured, 1, (const GLchar**)&buf, NULL);
+    glCompileShader(fragmentShader_textured);
 
     // check for errors
-    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    glGetShaderiv(fragmentShader_textured, GL_COMPILE_STATUS, &success);
     if(!success)
     {
-        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        glGetShaderInfoLog(fragmentShader_textured, 512, NULL, infoLog);
         printf("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n");
         return -1;
     }
 
     // attaching and linking the shaders to a shader program
-    unsigned int shaderProgram;
-    shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glLinkProgram(shaderProgram);
-    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    unsigned int shaderProgram_textured;
+    shaderProgram_textured = glCreateProgram();
+    glAttachShader(shaderProgram_textured, vertexShader_textured);
+    glAttachShader(shaderProgram_textured, fragmentShader_textured);
+    glLinkProgram(shaderProgram_textured);
+    glGetProgramiv(shaderProgram_textured, GL_LINK_STATUS, &success);
         if(!success) {
-        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        glGetProgramInfoLog(shaderProgram_textured, 512, NULL, infoLog);
         printf("ERROR::SHADER::PROGRAM::FAILED\n");
         return -1;
     }
@@ -252,7 +267,7 @@ int main(void) {
 
 
     // bind shader MVP variable to mvp_location variable in OpenGL
-    mvp_location = glGetUniformLocation(shaderProgram, "MVP");
+    mvp_location = glGetUniformLocation(shaderProgram_textured, "MVP");
 
     // camera view variable declaration
     mat4x4 LookAt;
@@ -327,8 +342,6 @@ int main(void) {
 
         mat4x4_mul(vp, p, LookAt);
 
-        glUseProgram(shaderProgram);
-        glBindVertexArray(VAO);
         
         for (int i = 0; i < 2; i++)
         {
@@ -344,8 +357,12 @@ int main(void) {
 
             if (i == 0) {
                 glBindTexture(GL_TEXTURE_2D, texture);
+                glUseProgram(shaderProgram_textured);
+                glBindVertexArray(VAO_textured);
             } else {
                 glBindTexture(GL_TEXTURE_2D, texture2);
+                glUseProgram(shaderProgram_textured);
+                glBindVertexArray(VAO_textured);
             }
 
             glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const float*)mvp);
