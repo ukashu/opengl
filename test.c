@@ -20,6 +20,7 @@ void print_mat4x4(const mat4x4 M);
 void processInput(GLFWwindow *window);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void load_text(char *filename, char *buf, int max_size);
+int init_shader_program(char *vertex_file_location, char* fragment_file_location);
 
 vec3 camPos = {0.0f, 1.0f , 1.0f};
 vec3 camTarget = {0.0f, 0.0f , -1.0f};
@@ -157,172 +158,27 @@ int main(void) {
     glEnableVertexAttribArray(0);
 
     // Creating the shaders for textured cube
-    unsigned int vertexShader_textured;
-    vertexShader_textured = glCreateShader(GL_VERTEX_SHADER);
-
-    // load vertex shader file
-    char *buf = malloc(8192);
-    load_text("texture.vert", buf, 8192);
-    //printf("%s\n", buf);
-
-    glShaderSource(vertexShader_textured, 1, (const GLchar**)&buf, NULL);
-    glCompileShader(vertexShader_textured);
-
-    // checking if it compiled succesfully
-    int success;
-    char infoLog[512];
-    glGetShaderiv(vertexShader_textured, GL_COMPILE_STATUS, &success);
-    if(!success)
-    {
-        glGetShaderInfoLog(vertexShader_textured, 512, NULL, infoLog);
-        printf("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n");
-        return -1;
-    }
-
-    // create shader object and compile fragment shader code into it
-    unsigned int fragmentShader_textured;
-    fragmentShader_textured = glCreateShader(GL_FRAGMENT_SHADER);
-
-    // load fragment shader file
-    load_text("texture.frag", buf, 8192);
-    //printf("%s\n", buf);
-
-    glShaderSource(fragmentShader_textured, 1, (const GLchar**)&buf, NULL);
-    glCompileShader(fragmentShader_textured);
-
-    // check for errors
-    glGetShaderiv(fragmentShader_textured, GL_COMPILE_STATUS, &success);
-    if(!success)
-    {
-        glGetShaderInfoLog(fragmentShader_textured, 512, NULL, infoLog);
-        printf("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n");
-        return -1;
-    }
-
-    // attaching and linking the shaders to a shader program
-    unsigned int shaderProgram_textured;
-    shaderProgram_textured = glCreateProgram();
-    glAttachShader(shaderProgram_textured, vertexShader_textured);
-    glAttachShader(shaderProgram_textured, fragmentShader_textured);
-    glLinkProgram(shaderProgram_textured);
-    glGetProgramiv(shaderProgram_textured, GL_LINK_STATUS, &success);
-        if(!success) {
-        glGetProgramInfoLog(shaderProgram_textured, 512, NULL, infoLog);
-        printf("ERROR::SHADER::PROGRAM::FAILED\n");
-        return -1;
+    int shaderProgram_textured = init_shader_program("texture.vert", "texture.frag");
+    if (shaderProgram_textured == -1) {
+        return EXIT_FAILURE;
     }
 
     // Creating the shaders for lit up cube
-    unsigned int vertexShader_lighting;
-    vertexShader_lighting = glCreateShader(GL_VERTEX_SHADER);
-
-    // load vertex shader file
-    load_text("diffuse.vert", buf, 8192);
-    //printf("%s\n", buf);
-
-    glShaderSource(vertexShader_lighting, 1, (const GLchar**)&buf, NULL);
-    glCompileShader(vertexShader_lighting);
-
-    // checking if it compiled succesfully
-    glGetShaderiv(vertexShader_lighting, GL_COMPILE_STATUS, &success);
-    if(!success)
-    {
-        glGetShaderInfoLog(vertexShader_lighting, 512, NULL, infoLog);
-        printf("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n");
-        return -1;
-    }
-
-    // create shader object and compile fragment shader code into it
-    unsigned int fragmentShader_lighting;
-    fragmentShader_lighting = glCreateShader(GL_FRAGMENT_SHADER);
-
-    // load fragment shader file
-    load_text("specular.frag", buf, 8192);
-    //printf("%s\n", buf);
-
-    glShaderSource(fragmentShader_lighting, 1, (const GLchar**)&buf, NULL);
-    glCompileShader(fragmentShader_lighting);
-
-    // check for errors
-    glGetShaderiv(fragmentShader_textured, GL_COMPILE_STATUS, &success);
-    if(!success)
-    {
-        glGetShaderInfoLog(fragmentShader_lighting, 512, NULL, infoLog);
-        printf("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n");
-        return -1;
-    }
-
-    // attaching and linking the shaders to a shader program
-    unsigned int shaderProgram_lighting;
-    shaderProgram_lighting = glCreateProgram();
-    glAttachShader(shaderProgram_lighting, vertexShader_lighting);
-    glAttachShader(shaderProgram_lighting, fragmentShader_lighting);
-    glLinkProgram(shaderProgram_lighting);
-    glGetProgramiv(shaderProgram_lighting, GL_LINK_STATUS, &success);
-        if(!success) {
-        glGetProgramInfoLog(shaderProgram_lighting, 512, NULL, infoLog);
-        printf("ERROR::SHADER::PROGRAM::FAILED\n");
-        return -1;
+    int shaderProgram_lighting = init_shader_program("diffuse.vert", "specular.frag");
+    if (shaderProgram_lighting == -1) {
+        return EXIT_FAILURE;
     }
 
     // Creating light source shader
-    unsigned int vertexShader_lightSource;
-    vertexShader_lightSource = glCreateShader(GL_VERTEX_SHADER);
-
-    // load vertex shader file
-    load_text("light_source.vert", buf, 8192);
-    //printf("%s\n", buf);
-
-    glShaderSource(vertexShader_lightSource, 1, (const GLchar**)&buf, NULL);
-    glCompileShader(vertexShader_lightSource);
-
-    // checking if it compiled succesfully
-    glGetShaderiv(vertexShader_lightSource, GL_COMPILE_STATUS, &success);
-    if(!success)
-    {
-        glGetShaderInfoLog(vertexShader_lightSource, 512, NULL, infoLog);
-        printf("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n");
-        return -1;
-    }
-
-    // create shader object and compile fragment shader code into it
-    unsigned int fragmentShader_lightSource;
-    fragmentShader_lightSource = glCreateShader(GL_FRAGMENT_SHADER);
-
-    // load fragment shader file
-    load_text("light_source.frag", buf, 8192);
-    //printf("%s\n", buf);
-
-    glShaderSource(fragmentShader_lightSource, 1, (const GLchar**)&buf, NULL);
-    glCompileShader(fragmentShader_lightSource);
-
-    // check for errors
-    glGetShaderiv(fragmentShader_textured, GL_COMPILE_STATUS, &success);
-    if(!success)
-    {
-        glGetShaderInfoLog(fragmentShader_lightSource, 512, NULL, infoLog);
-        printf("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n");
-        return -1;
-    }
-
-    // attaching and linking the shaders to a shader program
-    unsigned int shaderProgram_lightSource;
-    shaderProgram_lightSource = glCreateProgram();
-    glAttachShader(shaderProgram_lightSource, vertexShader_lightSource);
-    glAttachShader(shaderProgram_lightSource, fragmentShader_lightSource);
-    glLinkProgram(shaderProgram_lightSource);
-    glGetProgramiv(shaderProgram_lightSource, GL_LINK_STATUS, &success);
-        if(!success) {
-        glGetProgramInfoLog(shaderProgram_lightSource, 512, NULL, infoLog);
-        printf("ERROR::SHADER::PROGRAM::FAILED\n");
-        return -1;
+    int shaderProgram_lightSource = init_shader_program("light_source.vert", "light_source.frag");
+    if (shaderProgram_lightSource == -1) {
+        return EXIT_FAILURE;
     }
 
     // delete shader objects
     //glDeleteShader(vertexShader);
     //glDeleteShader(fragmentShader); 
     glEnable(GL_DEPTH_TEST);
-
 
     // texture loading
     unsigned int texture, texture2;
@@ -630,4 +486,69 @@ void load_text(char *filename, char *buf, int max_size)
 
     // Closing the file
     fclose(file_ptr);
+}
+
+int init_shader_program(char *vertex_file_location, char* fragment_file_location) {
+    // Creating the shaders for textured cube
+    unsigned int vertexShader;
+    vertexShader = glCreateShader(GL_VERTEX_SHADER);
+
+    // load vertex shader file
+    char *buf = malloc(8192);
+    load_text(vertex_file_location, buf, 8192);
+    //printf("%s\n", buf);
+
+    glShaderSource(vertexShader, 1, (const GLchar**)&buf, NULL);
+    glCompileShader(vertexShader);
+
+    // checking if it compiled succesfully
+    int success;
+    char infoLog[512];
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if(!success)
+    {
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        printf("ERROR::SHADER::VERTEX::COMPILATION_FAILED\n");
+        return -1;
+    }
+
+    // create shader object and compile fragment shader code into it
+    unsigned int fragmentShader;
+    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+
+    // load fragment shader file
+    load_text(fragment_file_location, buf, 8192);
+    //printf("%s\n", buf);
+
+    glShaderSource(fragmentShader, 1, (const GLchar**)&buf, NULL);
+    glCompileShader(fragmentShader);
+
+    // check for errors
+    glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
+    if(!success)
+    {
+        glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
+        printf("ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n");
+        return -1;
+    }
+
+    // attaching and linking the shaders to a shader program
+    unsigned int shaderProgram;
+    shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+        if(!success) {
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        printf("ERROR::SHADER::PROGRAM::FAILED\n");
+        return -1;
+    }
+
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
+    free(buf);
+
+    return shaderProgram;
 }
