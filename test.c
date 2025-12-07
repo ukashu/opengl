@@ -164,7 +164,7 @@ int main(void) {
     }
 
     // Creating the shaders for lit up cube
-    int shaderProgram_lighting = init_shader_program("diffuse.vert", "specular.frag");
+    int shaderProgram_lighting = init_shader_program("diffuse.vert", "blinn_phong.frag");
     if (shaderProgram_lighting == -1) {
         return EXIT_FAILURE;
     }
