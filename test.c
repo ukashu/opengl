@@ -406,17 +406,23 @@ void processInput(GLFWwindow *window)
         vec3_scale(temp, camRight, -cameraSpeed);
         vec3_sub(camPos, camPos, temp);
     }
+    //move light source
     if (glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS) {
-        //move light source
         cubePositions[2][0] -= cameraSpeed;
     }
     if (glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS) {
         cubePositions[2][0] += cameraSpeed;
     }
     if (glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS) {
-        cubePositions[2][1] -= cameraSpeed;
+        cubePositions[2][2] -= cameraSpeed;
     }
     if (glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS) {
+        cubePositions[2][2] += cameraSpeed;
+    }
+    if (glfwGetKey(window, GLFW_KEY_LEFT_SHIFT) == GLFW_PRESS) {
+        cubePositions[2][1] -= cameraSpeed;
+    }
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
         cubePositions[2][1] += cameraSpeed;
     }
 }
