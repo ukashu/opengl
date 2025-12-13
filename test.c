@@ -38,7 +38,9 @@ float lastX = 400, lastY = 300;
 vec3 cubePositions[] = {
     { -3.0f, 0.0f, 0.0f },
     { -1.0f, 0.0f, 0.0f },
-    { 0.0f, 2.0f, 2.0f }
+    { 0.0f, 2.0f, 2.0f },
+    { -5.0f, 0.0f, 0.0f },
+    { -7.0f, 0.0f, 0.0f }
 };
 
 int main(void) {
@@ -163,9 +165,21 @@ int main(void) {
         return EXIT_FAILURE;
     }
 
-    // Creating the shaders for lit up cube
+    // Creating the shaders for lit up cube (Diffuse)
+    int shaderProgram_diffuse = init_shader_program("diffuse.vert", "diffuse.frag");
+    if (shaderProgram_diffuse == -1) {
+        return EXIT_FAILURE;
+    }
+
+    // Creating the shaders for lit up cube (Blinn-Phong)
     int shaderProgram_lighting = init_shader_program("diffuse.vert", "blinn_phong.frag");
     if (shaderProgram_lighting == -1) {
+        return EXIT_FAILURE;
+    }
+
+    // Creating the shaders for lit up cube (Specular)
+    int shaderProgram_specular = init_shader_program("diffuse.vert", "specular.frag");
+    if (shaderProgram_specular == -1) {
         return EXIT_FAILURE;
     }
 
@@ -308,7 +322,7 @@ int main(void) {
 
         mat4x4_mul(vp, p, LookAt);
         
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < 5; i++)
         {
             mat4x4 m, mvp;
 
@@ -319,7 +333,7 @@ int main(void) {
                 cubePositions[i][2]);
 
             if (i == 0) {
-                // lit up cube
+                // Blinn-Phong cube
                 glUseProgram(shaderProgram_lighting);
                 glBindVertexArray(VAO_textured);
                 glUniform3f(objectColor_location, 1.0f, 0.5f, 0.31f);
@@ -344,7 +358,34 @@ int main(void) {
 
                 mat4x4_mul(mvp, vp, m);
                 glUniformMatrix4fv(mvp_location_lightSource, 1, GL_FALSE, (const float*)mvp);
-            } else {
+            } else if (i == 3) {
+                // Specular cube
+                glUseProgram(shaderProgram_specular);
+                glBindVertexArray(VAO_textured);
+                glUniform3f(objectColor_location, 1.0f, 0.5f, 0.31f);
+                glUniform3f(lightColor_location,1.0f, 0.5f, 0.31f);
+                glUniform3f(lightPos_location, cubePositions[2][0], cubePositions[2][1], cubePositions[2][2]);
+                glUniform3f(viewPos_location, camPos[0], camPos[1], camPos[2]);
+                glUniformMatrix4fv(model_location, 1, GL_FALSE, (const float*)m);
+                glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const float*)mvp);
+
+                mat4x4_mul(mvp, vp, m);
+                glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const float*)mvp);
+            } else if (i == 4) {
+                // Diffuse cube
+                glUseProgram(shaderProgram_diffuse);
+                glBindVertexArray(VAO_textured);
+                glUniform3f(objectColor_location, 1.0f, 0.5f, 0.31f);
+                glUniform3f(lightColor_location,1.0f, 0.5f, 0.31f);
+                glUniform3f(lightPos_location, cubePositions[2][0], cubePositions[2][1], cubePositions[2][2]);
+                glUniform3f(viewPos_location, camPos[0], camPos[1], camPos[2]);
+                glUniformMatrix4fv(model_location, 1, GL_FALSE, (const float*)m);
+                glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const float*)mvp);
+
+                mat4x4_mul(mvp, vp, m);
+                glUniformMatrix4fv(mvp_location, 1, GL_FALSE, (const float*)mvp);
+
+            } else if (i == 1) {
                 // textured cube
                 glBindTexture(GL_TEXTURE_2D, texture);
                 glUseProgram(shaderProgram_textured);
